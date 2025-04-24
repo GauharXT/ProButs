@@ -5,7 +5,9 @@ from .models import Product
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
         'name', 'brand', 'category', 'price', 'size',
-        'color', 'material', 'gender', 'is_available', 'created_at'
+        'color', 'gender', 'is_available', 'created_at'
     )
-    search_fields = ('name', 'brand', 'category', 'color', 'material')
+    search_fields = ('name', 'brand', 'category', 'color')
     list_filter = ('brand', 'category', 'size', 'color', 'gender', 'is_available', 'created_at')
+    ordering = ['-created_at']  # Сортировка по времени создания
+    list_display_links = ('name',)  # Сделать название продукта кликабельным
