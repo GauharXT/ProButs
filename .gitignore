@@ -1,7 +1,28 @@
-venv
-.venv
-.idea
-.pycashe
+# Python cache files
 __pycache__/
-db.sqlite3
-media
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+env/
+
+# Database files
+*.sqlite3
+*.db
+
+# IDE settings
+.vscode/
+.idea/
+
+# Django settings
+*.log
+*.pot
+*.pyc
+*.pyo
+*.db
+
+# Backup files
+*~
+*.bak
