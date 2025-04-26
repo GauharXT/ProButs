@@ -1,70 +1,55 @@
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
-# Менеджер для кастомного пользователя
 class CustomUserManager(BaseUserManager):
-    def create_user(self, username, email, password=None, **extra_fields):
-        """
-        Создает и возвращает обычного пользователя с email и паролем.
-        """
+    def create_user(self, email, username, password=None, **extra_fields):
         if not email:
-            raise ValueError('Пользователи должны иметь email')
+            raise ValueError('Email обязателен')
         email = self.normalize_email(email)
-        user = self.model(username=username, email=email, **extra_fields)
+        user = self.model(email=email, username=username, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, email, password=None, **extra_fields):
-        """
-        Создает и возвращает суперпользователя с email и паролем.
-        """
+    def create_superuser(self, email, username, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
+        return self.create_user(email, username, password, **extra_fields)
 
-        return self.create_user(username, email, password, **extra_fields)
 
-# Абстрактная модель пользователя
-class CustomUser(AbstractBaseUser):
-    username = models.CharField(max_length=150, unique=True)
+class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
+    username = models.CharField(max_length=150, unique=True)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
 
-    # Дополнительные поля
-    last_login = models.DateTimeField(auto_now=True)
-
-    # Менеджер для пользователя
     objects = CustomUserManager()
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
+    USERNAME_FIELD = 'email'  # Используем email вместо username для аутентификации
+    REQUIRED_FIELDS = ['username', 'first_name', 'last_name']  # Обязательные поля для создания суперпользователя
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name} ({self.email})'
+        return self.email
 
-# Модель для продукта (обуви)
+
+
+
+#Товары
 class Product(models.Model):
     GENDER_CHOICES = [
-        ('male', 'Male'),
-        ('female', 'Female'),
-        ('unisex', 'Unisex'),
-    ]
-
-    CATEGORY_CHOICES = [
-        ('shoes', 'Shoes'),
-        ('bags', 'Bags'),
-        ('accessories', 'Accessories'),
+        ('male', 'Мужской'),
+        ('female', 'Женский'),
+        ('unisex', 'Унисекс'),
     ]
 
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    size = models.DecimalField(max_digits=5, decimal_places=2)  # Для точности размера
+    size = models.CharField(max_length=10)
     brand = models.CharField(max_length=100)
-    category = models.CharField(max_length=100, choices=CATEGORY_CHOICES)  # Выбор категории
+    category = models.CharField(max_length=100)
     color = models.CharField(max_length=50)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
     image = models.ImageField(upload_to='product_images/')
@@ -73,24 +58,28 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
-from django.db import models
-from django.contrib.auth import get_user_model
-from .models import Product
 
+
+#Избранное
 class Favorite(models.Model):
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='favorites')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     class Meta:
         unique_together = ('user', 'product')
 
     def __str__(self):
-        return f"{self.user.username} - {self.product.name}"
+        return f"{self.user.username} ♥ {self.product.name}"
 
+
+#Корзина
 class Cart(models.Model):
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)  # Связь с пользователем
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)  # Связь с продуктом
-    quantity = models.PositiveIntegerField(default=1)  # Количество товара в корзине
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='cart')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
+    class Meta:
+        unique_together = ('user', 'product')
 
     def __str__(self):
-        return f"{self.user.username} - {self.product.name} (x{self.quantity})"
+        return f"{self.user.username} 🛒 {self.product.name} x {self.quantity}"
