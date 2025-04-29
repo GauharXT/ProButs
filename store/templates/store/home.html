@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sport Store</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .hero {
+            background-image: url('https://mida.shop/content/images/24/480x480e90nn0/63290194253663.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 777px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .products {
+            padding: 20px;
+        }
+
+        .product {
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .product h2 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>Онлайн Спорт Дүкөнүнө Кош Келдиңиз!</h1>
+    </div>
+
+    <div class="products">
+        {% for product in products %}
+            <div class="product">
+                <h2>{{ product.name }}</h2>
+                <p>Баасы: {{ product.price }} сом</p>
+                <p>Категориясы: {{ product.category }}</p>
+            </div>
+        {% empty %}
+        {% endfor %}
+    </div>
+</body>
+</html>
