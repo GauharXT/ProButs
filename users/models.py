@@ -6,4 +6,4 @@ class CustomUser(AbstractUser):
     age = models.PositiveIntegerField(null=True, blank=True)
 
     def __str__(self):
-        return self.email  # Эмаилди уникалдуу идентификатор катары
+        return self.email
