@@ -5,7 +5,7 @@ from django_filters import rest_framework as filters
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 
-from .models import Product, Favorite, Cart, CustomUser
+from .models import Product, Favorite, Cart
 from .serializers import (
     ProductSerializer,
     FavoriteSerializer,
