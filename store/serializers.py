@@ -30,14 +30,19 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 # Продукт
-
-
-
 class ProductDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
 
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = '__all__'
+
+
+# Заказ
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
@@ -58,8 +63,3 @@ class CartSerializer(serializers.ModelSerializer):
         model = Cart
         fields = '__all__'
         read_only_fields = ['user']
-
-class ProductSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Product
-        fields = '__all__'
