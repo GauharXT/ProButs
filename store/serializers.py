@@ -1,7 +1,6 @@
-from rest_framework import serializers
-from .models import User, Product, Favorite, Cart
+from .models import User, Product, Favorite, Cart, Order
 from django.contrib.auth.password_validation import validate_password
-
+from rest_framework import serializers
 
 # Регистрация
 class RegisterSerializer(serializers.ModelSerializer):
@@ -31,9 +30,17 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 # Продукт
-class ProductSerializer(serializers.ModelSerializer):
+
+
+
+class ProductDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
+        fields = '__all__'
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
         fields = '__all__'
 
 
@@ -51,3 +58,8 @@ class CartSerializer(serializers.ModelSerializer):
         model = Cart
         fields = '__all__'
         read_only_fields = ['user']
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = '__all__'
