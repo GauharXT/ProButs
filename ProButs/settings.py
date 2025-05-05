@@ -29,13 +29,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'rest_framework',
-    'rest_framework_simplejwt',
-    'drf_yasg',  # для Swagger документации
+
+    'drf_yasg',
 
     'store',
-    'register',  # ваше приложение с регистрацией
+    'register',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -124,6 +124,8 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
 }
 
+
+
 # Настройки для JWT
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
@@ -131,8 +133,9 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-
 AUTH_USER_MODEL = 'register.User'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+

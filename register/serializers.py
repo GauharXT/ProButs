@@ -21,23 +21,18 @@ class RegisterSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'email': {'required': True},
             'username': {'required': True},
-            'phone': {'required': False},
         }
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError({"password": "Password fields didn't match."})
+            raise serializers.ValidationError({"password": "Пароли не совпадают"})
 
         if User.objects.filter(email=attrs['email']).exists():
-            raise serializers.ValidationError({"email": "Email already exists"})
+            raise serializers.ValidationError({"email": "Email уже зарегистрирован"})
 
         return attrs
 
     def create(self, validated_data):
-        user = User.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            password=validated_data['password'],
-            phone=validated_data.get('phone', None)
-        )
+        validated_data.pop('password2')
+        user = User.objects.create_user(**validated_data)
         return user
