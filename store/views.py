@@ -12,7 +12,19 @@ from .serializers import (
     FavoriteSerializer,
     ProductDetailSerializer
 )
+from rest_framework import viewsets
+from .models import Product
+from .serializers import ProductSerializer
+from django_filters.rest_framework import DjangoFilterBackend
 from .filters import ProductFilter
+
+class ProductViewSet(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = ProductFilter
+    search_fields = ['name', 'brand', 'category', 'color']
+    ordering_fields = ['price', 'created_at']
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all().select_related('brand')
