@@ -1,5 +1,14 @@
 from django.contrib import admin
+<<<<<<< HEAD
 from .models import Product, Order, OrderItem, Cart, Favorite
+=======
+from .models import Product, Category
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ( 'brand', 'material',)
+    search_fields = ('brand', 'material',)
+>>>>>>> origin/dan
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
@@ -7,7 +16,11 @@ class ProductAdmin(admin.ModelAdmin):
         'name', 'brand', 'category', 'price', 'size',
         'color', 'gender', 'is_available', 'created_at'
     )
+<<<<<<< HEAD
     search_fields = ('name', 'brand', 'category', 'color')
+=======
+    search_fields = ('name', 'brand', 'color', 'material')
+>>>>>>> origin/dan
     list_filter = ('brand', 'category', 'size', 'color', 'gender', 'is_available', 'created_at')
     ordering = ['-created_at']
     list_display_links = ('name',)

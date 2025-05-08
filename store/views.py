@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from rest_framework import viewsets, permissions, status, filters
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -96,3 +97,13 @@ class FavoriteViewSet(viewsets.ModelViewSet):
         if Favorite.objects.filter(user=self.request.user, product=serializer.validated_data['product']).exists():
             raise serializers.ValidationError("Товар уже в избранном")
         serializer.save(user=self.request.user)
+=======
+from django.shortcuts import render
+from .models import Product
+
+def home(request):
+    products = Product.objects.all()
+    return render(request, 'store/home.html', {'products': products})
+
+
+>>>>>>> origin/dan
