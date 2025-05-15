@@ -1,6 +1,7 @@
-from datetime import datetime  # Добавьте эту строку
+from datetime import datetime
 from django.db import models
-from django.utils import timezone
+from django.utils.text import slugify
+
 class Category(models.Model):
     GENDER_CHOICES = [
         ('adidas', 'Adidas'),
@@ -79,6 +80,11 @@ class Category(models.Model):
     slug = models.SlugField(unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug and self.type_of_product:
+            self.slug = slugify(self.type_of_product)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.type_of_product

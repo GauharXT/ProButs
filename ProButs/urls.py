@@ -8,8 +8,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),  # Админ панелинин URL'и  ✅
     path('users/', include('users.urls')),  # Users тиркемеси учун URL
     path('api/', include('productList.urls')),  # ProductList API учун URL  ✅
-    path('product/', include('product_detail.urls')),  # ProductDetail URL
+    path('pro/', include('product_detail.urls')),  # ProductDetail URL
     path('cart/', include('cart.urls')),
+
 ]
 
 if settings.DEBUG:
