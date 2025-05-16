@@ -3,14 +3,14 @@ from .models import Product, Category
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ( 'brand', 'material',)
-    search_fields = ('brand', 'material',)
+    list_display = ('name', 'slug')
+    search_fields = ('name',)
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
-        'brand', 'category', 'price', 'size',
+        'name', 'brand', 'category', 'price', 'size',
         'color', 'material', 'gender', 'is_available', 'created_at'
     )
-    search_fields = ( 'brand', 'color', 'material')
+    search_fields = ('name', 'brand', 'category__name', 'color', 'material')
     list_filter = ('brand', 'category', 'size', 'color', 'gender', 'is_available', 'created_at')
