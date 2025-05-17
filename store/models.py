@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.utils.text import slugify
 
 class Category(models.Model):
@@ -41,7 +42,7 @@ class Category(models.Model):
     ]
 
     name = models.CharField(max_length=100, choices=CATEGORY_NAMES, unique=True)
-    slug = models.SlugField(unique=True, blank=True)
+    slug = models.SlugField(max_length=100, unique=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -50,7 +51,6 @@ class Category(models.Model):
 
     def __str__(self):
         return dict(self.CATEGORY_NAMES).get(self.name, self.name)
-
 
 class Product(models.Model):
     GENDER_CHOICES = [
@@ -88,7 +88,7 @@ class Product(models.Model):
         ('45', '45'), ('45.5', '45.5'), ('46', '46'), ('46.5', '46.5'),
         ('47', '47'), ('47.5', '47.5'), ('48', '48'), ('48.5', '48.5'),
         ('50', '50'), ('52', '52'), ('54', '54'), ('56', '56'),
-        ('58', '58'), ('62', '62'), ('66', '66'), ('ADULT', 'ADULT'),
+        ('58', '58'), ('62', '62'), ('66', '66'), ('ADULT', 'Adult'),
         ('One', 'One Size'), ('38 - 42', '38 - 42'), ('39 - 42', '39 - 42'),
         ('41 - 43', '41 - 43'), ('42 - 46', '42 - 46'), ('43 - 46', '43 - 46'),
         ('44 - 45.5', '44 - 45.5'), ('46 - 48', '46 - 48'), ('46 - 50', '46 - 50'),
@@ -144,4 +144,21 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.name} ({self.brand}) - {self.price}с"
+        return f"{self.name} ({self.brand}) - {self.price}₽"
+
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    total = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Order #{self.id} by {self.user.username}"
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.quantity} x {self.product.name}"
