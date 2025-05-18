@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-# register/views.py
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -8,15 +6,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from .serializers import RegisterSerializer
 from .models import User
-=======
-from django.shortcuts import render
-
-from rest_framework import generics, status
-from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
-from rest_framework_simplejwt.tokens import RefreshToken
-from .serializers import RegisterSerializer
->>>>>>> origin/dan
 
 class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
@@ -26,10 +15,7 @@ class RegisterView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/dan
         refresh = RefreshToken.for_user(user)
 
         return Response({
@@ -37,7 +23,6 @@ class RegisterView(generics.CreateAPIView):
                 'id': user.id,
                 'email': user.email,
                 'phone': user.phone,
-<<<<<<< HEAD
                 'username': user.username,
             },
             'refresh': str(refresh),
@@ -55,10 +40,3 @@ class UserView(APIView):
             'email': user.email,
             'phone': user.phone,
         })
-=======
-                'username': user.username
-            },
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
-        }, status=status.HTTP_201_CREATED)
->>>>>>> origin/dan

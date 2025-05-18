@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'users',
 
     'store',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -138,3 +139,9 @@ AUTH_USER_MODEL = 'users.CustomUser'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',  # Оставьте, если хотите DRF-интерфейс в браузере
+    ],
+}
