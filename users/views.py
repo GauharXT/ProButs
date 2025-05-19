@@ -12,7 +12,7 @@ class RegisterView(APIView):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({"message": "Катталуу ийгиликтүү!"}, status=status.HTTP_201_CREATED)
+            return Response({"message": "Катталуу ийгиликтуу!"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -22,11 +22,11 @@ class LoginView(APIView):
         if serializer.is_valid():
             user = serializer.validated_data
             login(request, user)
-            return Response({"message": "Кирүү ийгиликтүү!"}, status=status.HTTP_200_OK)
+            return Response({"message": "Кируу ийгиликтуу!"}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LogoutView(APIView):
     def post(self, request):
         logout(request)
-        return Response({"message": "Жүйөдөн чыктыңыз"}, status=status.HTTP_200_OK)
+        return Response({"message": "Жуктомодон чыктыныз"}, status=status.HTTP_200_OK)

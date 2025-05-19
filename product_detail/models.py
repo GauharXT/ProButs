@@ -71,9 +71,7 @@ class Category(models.Model):
         ('wool_acrylic', 'Жүн + Акрил'),
         ('silk_nylon', 'Жибек + Нейлон'),
     ]
-
     type_of_product = models.CharField(max_length=100, null=True, choices=CATEGORY_NAMES)
-    name = models.CharField(max_length=100)
     brand = models.CharField(max_length=100, null=False, default='default_brand', choices=GENDER_CHOICES)
     material = models.CharField(max_length=100, null=True, blank=True, choices=MATERIAL_CHOICES)
     description = models.TextField(null=True, blank=True)
@@ -84,8 +82,12 @@ class Category(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.name)
-        super().save(*args, **kwargs)  # Corrected the parenthesis here
+            self.slug = slugify(self.type_of_product)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return dict(self.CATEGORY_NAMES).get(self.type_of_product, self.type_of_product)
+
 
 class Product(models.Model):
     CATEGORY_NAMES = [

@@ -4,7 +4,7 @@ from .models import Product, Category, Order, OrderItem
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['id', 'name', 'slug']
+        fields = ['id', 'type_of_product', 'slug']
 
 class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
@@ -17,9 +17,10 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = [
-            'id', 'name', 'price', 'size', 'brand', 'category', 'category_id',
+            'id', 'type_of_product', 'price', 'size', 'brand', 'category', 'category_id',
             'color', 'material', 'gender', 'image', 'is_available', 'created_at'
         ]
+        ref_name = "StoreProductSerializer"
 
 class OrderItemSerializer(serializers.ModelSerializer):
     product = ProductSerializer(read_only=True)
@@ -47,7 +48,6 @@ class OrderSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         total_price = 0
 
-        # Создаем заказ
         order = Order.objects.create(user=user, total=0)
 
         for item_data in items_data:

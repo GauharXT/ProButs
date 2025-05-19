@@ -4,7 +4,7 @@ from .models import CustomUser
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
-    # Добавляем кастомные поля в отображение и создание пользователя
+    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
     fieldsets = UserAdmin.fieldsets + (
         (None, {'fields': ('phone', 'avatar')}),
     )
