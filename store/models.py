@@ -1,7 +1,24 @@
 from django.db import models
+from django.conf import settings
 from django.utils.text import slugify
 
 class Category(models.Model):
+    GENDER_CHOICES = [
+        ('adidas', 'Adidas'),
+        ('demix', 'Demix'),
+        ('emporio armani', 'Emporio Armani'),
+        ('hugo boss', 'Hugo Boss'),
+        ('jack wolfskin', 'Jack Wolfskin'),
+        ('joss', 'Joss'),
+        ('kelme', 'Kelme'),
+        ('molten', 'Molten'),
+        ('nike', 'Nike'),
+        ('puma', 'Puma'),
+        ('outventure', 'Outventure'),
+        ('speedo', 'Speedo'),
+        ('under armour', 'Under Armour')
+    ]
+
     CATEGORY_NAMES = [
         ('barsyetka', 'Барсетка'),
         ('bolero', 'Болеро'),
@@ -32,7 +49,7 @@ class Category(models.Model):
         ('trusy', 'Трусы'),
         ('futbolka_base', 'Футболка BASE'),
         ('futbolka_dl_rukav', 'Футболка дл рукав'),
-        ('futbolka', 'Футболка'),
+        ('futbolka', 'Футболка.'),
         ('shapka', 'Шапка'),
         ('shorty', 'Шорты'),
         ('shorty_base', 'Шорты BASE'),
@@ -40,17 +57,38 @@ class Category(models.Model):
         ('shtany_base', 'Штаны BASE'),
     ]
 
-    name = models.CharField(max_length=100, choices=CATEGORY_NAMES, unique=True)
+    MATERIAL_CHOICES = [
+        ('cotton', 'Пахта'),
+        ('wool', 'Жүн'),
+        ('silk', 'Жибек'),
+        ('linen', 'Лён'),
+        ('bamboo', 'Бамбук'),
+        ('polyester', 'Полиэстер'),
+        ('nylon', 'Нейлон'),
+        ('acrylic', 'Акрил'),
+        ('spandex', 'Эластан'),
+        ('microfiber', 'Микрофибра'),
+        ('cotton_polyester', 'Пахта + Полиэстер'),
+        ('wool_acrylic', 'Жүн + Акрил'),
+        ('silk_nylon', 'Жибек + Нейлон'),
+    ]
+
+    type_of_product = models.CharField(max_length=100, null=True, choices=CATEGORY_NAMES)
+    brand = models.CharField(max_length=100, choices=GENDER_CHOICES)
+    material = models.CharField(max_length=100, null=True, blank=True, choices=MATERIAL_CHOICES)
+    description = models.TextField(null=True, blank=True)
+    image = models.ImageField(upload_to='category_images/', null=True, blank=True)
     slug = models.SlugField(unique=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.name)
+            self.slug = slugify(self.type_of_product)
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return dict(self.CATEGORY_NAMES).get(self.name, self.name)
-
+        return dict(self.CATEGORY_NAMES).get(self.type_of_product, self.type_of_product)
 
 class Product(models.Model):
     GENDER_CHOICES = [
@@ -88,7 +126,7 @@ class Product(models.Model):
         ('45', '45'), ('45.5', '45.5'), ('46', '46'), ('46.5', '46.5'),
         ('47', '47'), ('47.5', '47.5'), ('48', '48'), ('48.5', '48.5'),
         ('50', '50'), ('52', '52'), ('54', '54'), ('56', '56'),
-        ('58', '58'), ('62', '62'), ('66', '66'), ('ADULT', 'ADULT'),
+        ('58', '58'), ('62', '62'), ('66', '66'), ('ADULT', 'Adult'),
         ('One', 'One Size'), ('38 - 42', '38 - 42'), ('39 - 42', '39 - 42'),
         ('41 - 43', '41 - 43'), ('42 - 46', '42 - 46'), ('43 - 46', '43 - 46'),
         ('44 - 45.5', '44 - 45.5'), ('46 - 48', '46 - 48'), ('46 - 50', '46 - 50'),
@@ -130,11 +168,48 @@ class Product(models.Model):
         ('wool_acrylic', 'Жүн + Акрил'),
         ('silk_nylon', 'Жибек + Нейлон'),
     ]
+    CATEGORY_NAMES = [
+        ('barsyetka', 'Барсетка'),
+        ('bolero', 'Болеро'),
+        ('vetrovka', 'Ветровка'),
+        ('zhiletka', 'Жилетка'),
+        ('kepka', 'Кепка'),
+        ('kovrik_dlya_yogi', 'Коврик для йоги'),
+        ('kostyum', 'Костюм'),
+        ('krossovki', 'Кроссовки'),
+        ('kurtka', 'Куртка'),
+        ('losiny', 'Лосины'),
+        ('mayka', 'Майка'),
+        ('nakolennik', 'Наколенник'),
+        ('napulsnik', 'Напульсник'),
+        ('noski', 'Носки'),
+        ('ochki', 'Очки'),
+        ('perchatki', 'Перчатки'),
+        ('perchatki_dlya_treninga', 'Перчатки для тренинга'),
+        ('platye', 'Платье'),
+        ('polo', 'Поло'),
+        ('ryukzak', 'Рюкзак'),
+        ('sandalii', 'Сандалии'),
+        ('slantsy', 'Сланцы'),
+        ('sumka', 'Сумка'),
+        ('sumka_na_poyas', 'Сумка на пояс'),
+        ('tolstovka', 'Толстовка'),
+        ('top', 'Топ'),
+        ('trusy', 'Трусы'),
+        ('futbolka_base', 'Футболка BASE'),
+        ('futbolka_dl_rukav', 'Футболка дл рукав'),
+        ('futbolka', 'Футболка.'),
+        ('shapka', 'Шапка'),
+        ('shorty', 'Шорты'),
+        ('shorty_base', 'Шорты BASE'),
+        ('shtany', 'Штаны'),
+        ('shtany_base', 'Штаны BASE'),
+    ]
 
-    name = models.CharField(max_length=255)
+    type_of_product = models.CharField(max_length=100, choices=CATEGORY_NAMES)
+    brand = models.CharField(max_length=100, choices=BRAND_CHOICES)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     size = models.CharField(max_length=20, choices=SIZE_CHOICES)
-    brand = models.CharField(max_length=100, choices=BRAND_CHOICES)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     color = models.CharField(max_length=50, choices=COLOR_CHOICES)
     material = models.CharField(max_length=100, choices=MATERIAL_CHOICES, null=True, blank=True)
@@ -144,4 +219,23 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.name} ({self.brand}) - {self.price}с"
+        return f"{self.type_of_product} - {self.brand} - {self.price}с"
+
+
+class Order(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    total = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Order #{self.id} by {self.user}"
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.quantity} x {self.product.name}"

@@ -14,15 +14,15 @@ class LoginForm(AuthenticationForm):
         label='Email',
         widget=forms.EmailInput(attrs={'class': 'form-control'}))
     password = forms.CharField(
-        label='Сырсөз',
+        label='Сырсоз',
         widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
 class RegisterForm(forms.ModelForm):
     password1 = forms.CharField(
-        label='Сырсөз',
+        label='Сырсоз',
         widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     password2 = forms.CharField(
-        label='Сырсөздү кайталаңыз',
+        label='Сырсоздү кайталаныз',
         widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
     class Meta:
@@ -31,7 +31,7 @@ class RegisterForm(forms.ModelForm):
 
     def clean(self):
         if self.cleaned_data.get('password1') != self.cleaned_data.get('password2'):
-            raise forms.ValidationError('Сырсөздөр дал келбейт!')
+            raise forms.ValidationError('Сырсоздор дал келбейт!')
         return self.cleaned_data
 
     def save(self, commit=True):
