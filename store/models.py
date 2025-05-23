@@ -35,7 +35,7 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     size = models.CharField(max_length=10)
-    brand = models.CharField(max_length=100)  # Можно заменить на ForeignKey позже
+    brand = models. ForeignKey(max_length=100)  # Можно заменить на ForeignKey позже
     category = models.CharField(max_length=100)
     color = models.CharField(max_length=50)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
