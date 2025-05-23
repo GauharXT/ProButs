@@ -7,7 +7,8 @@ from .views import (
     CartViewSet,
     OrderViewSet,
     RegisterView,
-    UserView
+    UserView,
+    home,  # допустим, у тебя есть view для главной страницы
 )
 
 router = DefaultRouter()
@@ -17,15 +18,10 @@ router.register(r'cart', CartViewSet, basename='cart')
 router.register(r'orders', OrderViewSet, basename='order')
 
 urlpatterns = [
-    path('', include(router.urls)),
-
-    # JWT
+    path('', home, name='store_home'),                     # главная страница магазина
+    path('api/', include(router.urls)),                    # все DRF endpoints по /api/...
     path('auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-
-    # Registration
     path('auth/register/', RegisterView.as_view(), name='register'),
-
-    # User info
     path('auth/user/', UserView.as_view(), name='user_info'),
 ]

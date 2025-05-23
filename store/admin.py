@@ -1,14 +1,10 @@
 from django.contrib import admin
-<<<<<<< HEAD
-from .models import Product, Order, OrderItem, Cart, Favorite
-=======
-from .models import Product, Category
+from .models import Product, Order, OrderItem, Cart, Favorite, Category
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ( 'brand', 'material',)
+    list_display = ('brand', 'material',)
     search_fields = ('brand', 'material',)
->>>>>>> origin/dan
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
@@ -16,21 +12,15 @@ class ProductAdmin(admin.ModelAdmin):
         'name', 'brand', 'category', 'price', 'size',
         'color', 'gender', 'is_available', 'created_at'
     )
-<<<<<<< HEAD
-    search_fields = ('name', 'brand', 'category', 'color')
-=======
-    search_fields = ('name', 'brand', 'color', 'material')
->>>>>>> origin/dan
+    search_fields = ('name', 'brand', 'color', 'material', 'category')
     list_filter = ('brand', 'category', 'size', 'color', 'gender', 'is_available', 'created_at')
     ordering = ['-created_at']
     list_display_links = ('name',)
-
 
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
     extra = 0
     readonly_fields = ('product', 'quantity')
-
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
@@ -40,12 +30,10 @@ class OrderAdmin(admin.ModelAdmin):
     inlines = [OrderItemInline]
     readonly_fields = ('total_price',)
 
-
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
     list_display = ('user', 'product', 'quantity', 'is_active')
     search_fields = ('user__username', 'product__name')
-
 
 @admin.register(Favorite)
 class FavoriteAdmin(admin.ModelAdmin):

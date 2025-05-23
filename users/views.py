@@ -8,7 +8,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('home')
+            return redirect('home')  # замените на вашу домашнюю страницу
     else:
         form = LoginForm()
     return render(request, 'users/login.html', {'form': form})
@@ -19,7 +19,7 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('home')
+            return redirect('home')  # замените на вашу домашнюю страницу
     else:
         form = RegisterForm()
     return render(request, 'users/register.html', {'form': form})

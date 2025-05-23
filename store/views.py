@@ -1,10 +1,11 @@
-<<<<<<< HEAD
-from rest_framework import viewsets, permissions, status, filters
+from rest_framework import viewsets, permissions, status, filters, serializers
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
-from django.db.models import Prefetch, Sum, F
-from rest_framework import serializers
+from django.shortcuts import render
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny, IsAuthenticated
+
 from .models import Product, Cart, Order, Favorite
 from .serializers import (
     ProductSerializer,
@@ -13,26 +14,28 @@ from .serializers import (
     FavoriteSerializer,
     ProductDetailSerializer
 )
-from rest_framework import viewsets
-from .models import Product
-from .serializers import ProductSerializer
-from django_filters.rest_framework import DjangoFilterBackend
 from .filters import ProductFilter
+
+# --- API Views for registration and user info ---
+
+class RegisterView(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request):
+        return Response({"message": "User registered!"})
+
+class UserView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        return Response({"message": "User info"})
+
+# --- API ViewSets ---
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    filter_backends = (DjangoFilterBackend,)
-    filterset_class = ProductFilter
-    search_fields = ['name', 'brand', 'category', 'color']
-    ordering_fields = ['price', 'created_at']
-
-class ProductViewSet(viewsets.ModelViewSet):
-    queryset = Product.objects.all().select_related('brand')
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_class = ProductFilter
-    search_fields = ['name', 'description', 'brand__name']
+    search_fields = ['name', 'brand', 'category', 'color']
     ordering_fields = ['price', 'created_at']
 
     def get_serializer_class(self):
@@ -75,7 +78,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Order.objects.filter(user=self.request.user).prefetch_related('products')
+        return Order.objects.filter(user=self.request.user).prefetch_related('items__product')
 
     def perform_create(self, serializer):
         cart_items = Cart.objects.filter(user=self.request.user)
@@ -83,7 +86,9 @@ class OrderViewSet(viewsets.ModelViewSet):
             raise serializers.ValidationError("Корзина пуста")
         total = sum(item.product.price * item.quantity for item in cart_items)
         order = serializer.save(user=self.request.user, total_price=total)
-        order.products.set([item.product for item in cart_items])
+        # Создаём OrderItem для каждого товара
+        for item in cart_items:
+            order.items.create(product=item.product, quantity=item.quantity)
         cart_items.delete()
 
 class FavoriteViewSet(viewsets.ModelViewSet):
@@ -97,13 +102,9 @@ class FavoriteViewSet(viewsets.ModelViewSet):
         if Favorite.objects.filter(user=self.request.user, product=serializer.validated_data['product']).exists():
             raise serializers.ValidationError("Товар уже в избранном")
         serializer.save(user=self.request.user)
-=======
-from django.shortcuts import render
-from .models import Product
+
+# --- Django Template View ---
 
 def home(request):
     products = Product.objects.all()
     return render(request, 'store/home.html', {'products': products})
-
-
->>>>>>> origin/dan
