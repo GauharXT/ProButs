@@ -20,16 +20,16 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('', include('store.urls')),  # Store тиркемеси учун URL
-    path('admin/', admin.site.urls),  # Админ панелинин URL'и  ✅
-    path('users/', include('users.urls')),  # Users тиркемеси учун URL
-    path('productList/', include('productList.urls')),  # ProductList API учун URL  ✅
-    path('product_detail/', include('product_detail.urls')),  # ProductDetail URL
-    path('cart/', include('cart.urls')),
-    path('register/', include('register.urls')),
-    # Swagger UI үчүн URL'дер:
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0)),
-    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0)),
+    path('', include('store.urls')),  # Store тиркемеси учун URL #DANIEL
+    path('admin/', admin.site.urls),  # Админ панелинин URL'и  ✅ DANIEL
+    path('users/', include('users.urls')),  # Users тиркемеси учун URL DANIEL
+    path('productList/', include('productList.urls')),  # ProductList API учун URL  ✅  #DANIEL
+    path('product_detail/', include('product_detail.urls')),  # ProductDetail URL  #DANIEL
+    path('cart/', include('cart.urls')), #DANIEL
+    path('register/', include('register.urls')), #DANIEL
+    path('pagination/', include('pagination.urls')), #DANIEL
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0)),#DANIEL
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0)),   #DANIEL
 ]
 
 if settings.DEBUG:

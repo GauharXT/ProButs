@@ -31,12 +31,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'django_filters',
     'register',
     'drf_yasg',
@@ -46,6 +48,7 @@ INSTALLED_APPS = [
     'users',
     'store',
     'cart',
+    'pagination',
 ]
 
 MIDDLEWARE = [
@@ -140,10 +143,50 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication'
     ],
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
+    ],
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend',]
 }
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+JAZZMIN_SETTINGS = {
+    "site_title": "ProButs Админ панел",
+    "site_header": "ProButs",
+    "site_brand": "ProButs",
+    "welcome_sign": "ProButs админ панелине кош келиңиз!",
+    "copyright": "© 2025 ProButs. Бардык укуктар корголгон.",
+    "theme": "cerulean",
+
+
+    "search_model": ["products.Product"],
+    "show_sidebar": True,
+    "navigation_expanded": True,
+
+
+    "custom_links": {
+        "auth": [{
+            "name": "Сырсозду алмаштыруу",
+            "url": "admin:password_change",
+            "icon": "fas fa-key",
+            "permissions": ["auth.change_user"]
+        }]
+    },
+
+    "icons": {
+        "auth": "fas fa-users",
+        "auth.user": "fas fa-user",
+        "auth.group": "fas fa-users-cog",
+        "products.Product": "fas fa-box",
+        "products.Category": "fas fa-tags",
+    },
+}

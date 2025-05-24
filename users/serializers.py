@@ -12,7 +12,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         if data['password1'] != data['password2']:
-            raise serializers.ValidationError("Сыр-сөздөр дал келбейт.")
+            raise serializers.ValidationError("Сыр-сoздoр дал келбейт.")
         return data
 
     def create(self, validated_data):
@@ -33,4 +33,4 @@ class LoginSerializer(serializers.Serializer):
         user = authenticate(username=data['username'], password=data['password'])
         if user and user.is_active:
             return user
-        raise serializers.ValidationError("Колдонуучу аты же сыр-сөз туура эмес.")
+        raise serializers.ValidationError("Колдонуучу аты же сыр-сoз туура эмес.")

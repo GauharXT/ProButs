@@ -11,7 +11,7 @@ def view_cart(request):
     return JsonResponse({
         'cart_items': [
             {
-                'product': item.product.name,
+                'product': item.product.type_of_product,
                 'quantity': item.quantity,
                 'total_price': item.total_price
             } for item in cart_items
@@ -28,7 +28,7 @@ def add_to_cart(request, product_id):
         cart_item.quantity += 1
         cart_item.save()
 
-    return JsonResponse({'message': f'{product.name} added to cart'})
+    return JsonResponse({'message': f'{product.type_of_product} added to cart'})
 
 def remove_from_cart(request, cart_item_id):
     cart_item = get_object_or_404(CartItem, id=cart_item_id)
